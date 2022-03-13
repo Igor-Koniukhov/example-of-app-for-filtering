@@ -31,7 +31,7 @@ export default {
   },
 };
 </script>
-<style>
+<style >
 .list-of-coaches {
   box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
 }
