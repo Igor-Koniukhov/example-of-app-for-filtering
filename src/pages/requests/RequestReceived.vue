@@ -1,10 +1,11 @@
 <template>
   <section>
     <base-card>
-      <header>
+      <header>      
         <h2>Request Received</h2>
       </header>
-      <ul v-if="hasRequests">
+        <base-spinner v-if="isLoading"></base-spinner>
+      <ul v-else-if="hasRequests && !isLoading">
         <requests-item
           v-for="req in receivedRequests"
           :key="req.id"
@@ -23,6 +24,13 @@ export default {
   components: {
     RequestsItem,
   },
+  data(){
+    return{
+      isLoading: false,
+      error: null,
+    }
+
+  },
   computed: {
     receivedRequests() {
         console.log( this.$store.getters['requests/requests']);
@@ -32,6 +40,25 @@ export default {
       return this.$store.getters['requests/hasRequests'];
     },
   },
+  created(){
+    this.LoadRequests();
+  },
+  methods: {
+   async loadRequests(){
+     this.isLoading = true;
+     try{
+        await this.$store.dispatch('requests/fetchRequests');
+     }catch(error){
+       this.error = error.message || 'Something failed!'
+
+     }
+    
+     this.isLoading = false;
+    },
+    handleError(){
+      this.error = null;
+    }
+  }
 };
 </script>
 
