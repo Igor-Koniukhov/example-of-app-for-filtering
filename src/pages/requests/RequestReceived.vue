@@ -1,21 +1,23 @@
 <template>
-  <section>
-    <base-card>
-      <header>      
-        <h2>Request Received</h2>
-      </header>
+  <div>
+    <section>
+      <base-card>
+        <header>
+          <h2>Request Received</h2>
+        </header>
         <base-spinner v-if="isLoading"></base-spinner>
-      <ul v-else-if="hasRequests && !isLoading">
-        <requests-item
-          v-for="req in receivedRequests"
-          :key="req.id"
-          :email="req.userEmail"
-          :message="req.message"
-        ></requests-item>
-      </ul>
-      <h3 v-else>You haven't received any requests yet!</h3>
-    </base-card>
-  </section>
+        <ul v-else-if="hasRequests && !isLoading">
+          <requests-item
+            v-for="req in receivedRequests"
+            :key="req.id"
+            :email="req.userEmail"
+            :message="req.message"
+          ></requests-item>
+        </ul>
+        <h3 v-else>You haven't received any requests yet!</h3>
+      </base-card>
+    </section>
+  </div>
 </template>
 <script>
 import RequestsItem from '../../components/requests/RequestItem.vue';
@@ -24,46 +26,43 @@ export default {
   components: {
     RequestsItem,
   },
-  data(){
-    return{
+  data() {
+    return {
       isLoading: false,
       error: null,
-    }
-
+    };
   },
   computed: {
     receivedRequests() {
-        console.log( this.$store.getters['requests/requests']);
+      console.log(this.$store.getters['requests/requests']);
       return this.$store.getters['requests/requests'];
     },
     hasRequests() {
       return this.$store.getters['requests/hasRequests'];
     },
   },
-  created(){
+  created() {
     this.LoadRequests();
   },
   methods: {
-   async loadRequests(){
-     this.isLoading = true;
-     try{
+    async loadRequests() {
+      this.isLoading = true;
+      try {
         await this.$store.dispatch('requests/fetchRequests');
-     }catch(error){
-       this.error = error.message || 'Something failed!'
+      } catch (error) {
+        this.error = error.message || 'Something failed!';
+      }
 
-     }
-    
-     this.isLoading = false;
+      this.isLoading = false;
     },
-    handleError(){
+    handleError() {
       this.error = null;
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped>
-
 header {
   text-align: center;
 }
